@@ -216,6 +216,7 @@ void Prosthaphaeresis::operator()(Term& term)
 		auto loprand = std::get<Number>(*left->expr_or_num);
 		auto roprand = std::get<Number>(*right->operand.expr_or_num);
 
+		/// init new node
 		decltype(Term::follows) follow;
 		for (auto i = 0; i < roprand - 1; ++i)
 			follow.push_back(std::make_unique<UnaryExpr<Factor>>(UnaryExpr<Factor>{
@@ -223,8 +224,7 @@ void Prosthaphaeresis::operator()(Term& term)
 				.operand = std::make_unique<Factor::Value>(loprand)
 			}));
 
-		term.factor.release();
-		left = std::make_unique<Factor>(Factor{
+		term.factor = std::make_unique<Factor>(Factor{
 			.expr_or_num = std::make_unique<Factor::Value>(Expr{
 				.term = std::make_unique<Term>(Term{
 					.factor = std::make_unique<Factor>(Factor{

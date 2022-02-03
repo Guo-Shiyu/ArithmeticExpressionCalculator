@@ -13,8 +13,6 @@
 # 测试样例
  参见 `test` 目录, 默认情况下编译执行 ArithmeticExpressionCalculator.cpp 将自动寻找 `test` 目录并进行测试. 
 
-# 缺陷
-
 # EBNF 
  算术表达式的 EBNF 来自于 [这里](https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/19_writing_recursive_descent_parser.html) .
  
