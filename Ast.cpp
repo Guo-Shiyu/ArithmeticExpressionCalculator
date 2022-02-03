@@ -14,18 +14,18 @@ AST::AstRoot &AST::root() const
 	return *_root;
 }
 
-void AST::check_eof(Lexer &lex)
+void AST::_check_eof(Lexer &lex)
 {
 	if (lex.is_eof())
-		unexpect<void>({"unexpected eof"});
+		unexpected<void>("unexpected eof");
 }
 
 AST AST::parse(string &&expr)
 {
-	auto lexer = Lexer{expr};
+	auto lexer = Lexer{std::forward<string>(expr)};
 	auto ret = AST(AstNode{parse_expr(lexer)});
 	if (not lexer.is_eof())
-		unexpect<void>("unfinished parsing");
+		unexpected<void>("unfinished parsing with unmatched token: {}", lexer.peek().to_string());
 	return ret;
 }
 
@@ -76,20 +76,24 @@ Term AST::parse_term(Lexer &lex)
 /// factor ::= "(" expr ")" | NUM
 Factor AST::parse_factor(Lexer &lex)
 {
-	check_eof(lex);
-	auto next = lex.next();
+	_check_eof(lex);
+	auto next = lex.peek();
 	if (is_expected(next, Delim::LeftParent))
 	{
+		lex.next();	/// skip '('
 		auto expr = parse_expr(lex);
 		if (auto next = lex.next(); is_expected(next, Delim::RightParent)) /// skip right parent
 			return {std::make_unique<Factor::Value>(std::move(expr))};
 		else
-			return unexpect<Factor>("'right parent' expected here");
+			return unexpected<Factor>("')' expected here, but {} was found", lex.peek().to_string());
 	}
 	else if (next.is<Number>())
+	{
+		lex.next();	/// skip 'number'
 		return {std::make_unique<Factor::Value>(next.get_unchecked<Number>())};
+	}
 	else
-		return unexpect<Factor>("'number' or 'expr' expected here, but xxxx was found");
+		return unexpected<Factor>("'number' or '(' expected here, but {} was found", lex.peek().to_string());
 }
 
 #undef AST

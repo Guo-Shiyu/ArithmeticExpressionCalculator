@@ -6,12 +6,14 @@
 # 简述 
  + 近似于生成器/迭代器的词法、语法分析器
  + LL(1) 递归下降 Parser
+ + 语法树的节点基于 ADT （variant）实现
  + 非 继承/虚函数 实现的Pass系统, <!-- 类似于 简化的 llvm 中的 New Pass System. 支持自定义Pass及调整Pass流程, --> 提供了操作语法树的接口以及在各个Pass开始结束阶段的钩子  
- + 默认提供 `格式化`、 `求值`、 `积化和差` 三个Pass, 位于 `operations.h/cpp` 中, 以展示对 AST 的 遍历/分析/变换 操作. 
+ + 默认提供 `HelloPass`、 `格式化`、 `求值`、 `积化和差` 三个Pass, 位于 `operations.h/cpp` 中, 以展示 Pass的工作流程 和对 AST 的 遍历/分析/变换 操作. 
 
 # 测试样例
- TODO: 尚不完善  
  参见 `test` 目录, 默认情况下编译执行 ArithmeticExpressionCalculator.cpp 将自动寻找 `test` 目录并进行测试. 
+
+# 缺陷
 
 # EBNF 
  算术表达式的 EBNF 来自于 [这里](https://python3-cookbook.readthedocs.io/zh_CN/latest/c02/19_writing_recursive_descent_parser.html) .

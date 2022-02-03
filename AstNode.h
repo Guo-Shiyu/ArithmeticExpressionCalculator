@@ -3,12 +3,10 @@
 #include "Lexer.h"
 
 #include <memory>
-#include <vector>
 
 namespace aec
 {
     using std::unique_ptr;
-    using std::vector;
 
     /// forward declare all struct of ast node
     ///

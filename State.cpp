@@ -11,7 +11,7 @@ State aec::State::load_expr(string &&text)
 
 State &aec::State::start()
 {
-	for (auto &pass : _pass)
+	for (auto pass : _pass)
 		pass->execute(_ast);
 	return *this;
 }

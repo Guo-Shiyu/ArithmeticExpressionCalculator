@@ -2,9 +2,6 @@
 
 #include "AstNode.h"
 
-#include <optional>
-#include <format>
-
 namespace aec
 {
 	using std::optional;
@@ -17,12 +14,6 @@ namespace aec
 		/// {visitor(node)};
 		{std::visit(visitor, node)};
 	};
-
-	/// forward declare
-	template <typename T>
-	struct AstReadPass;
-	template <typename T>
-	struct AstWritePass;
 
 	class AbstractSyntaxTree
 	{
@@ -39,26 +30,16 @@ namespace aec
 
 	public:
 		static AbstractSyntaxTree parse(string &&expr);
+		static Expr parse_expr(Lexer &lex);
+		static Term parse_term(Lexer &lex);
+		static Factor parse_factor(Lexer &lex);
 
 		AstRoot &root() const;
 
 	protected:
 		explicit AbstractSyntaxTree(AstNode &&);
 
-		static void check_eof(Lexer &lex);
-		static Expr parse_expr(Lexer &lex);
-		static Term parse_term(Lexer &lex);
-		static Factor parse_factor(Lexer &lex);
-
-	private:
-		/// on error case
-		template <typename T, typename... Args>
-		static T unexpect(const char *fmt, Args... args)
-		{
-			throw std::format(fmt, args...);
-			return T();
-		}
-
+		static void _check_eof(Lexer &lex);
 	private:
 		UniqueOwn<AstRoot> _root;
 	};

@@ -1,9 +1,12 @@
 #pragma once
+
+#include <string>
 #include <variant>
 
 namespace aec
 {
     using std::variant;
+    using std::string;
 
     /// (  )
     enum class Delim
@@ -36,10 +39,7 @@ namespace aec
     {
     public:
         using TokenType = variant<Number, Operator, Delim>;
-
-    public:
-        static const Token None;
-
+        static Token eof;
     public:
         Token() = delete;
         Token(const Token &) = default;
@@ -65,10 +65,9 @@ namespace aec
             return std::get<T>(_inner);
         }
 
-        bool operator==(const Token &token) const
-        {
-            return _inner == token._inner;
-        }
+        bool operator==(const Token &token) const;
+
+        string to_string() const;
 
     private:
         TokenType _inner;

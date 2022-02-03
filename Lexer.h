@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-#include <string_view>
+#include <format>
 #include <vector>
 #include <optional>
 
@@ -10,8 +9,15 @@
 namespace aec
 {
     using std::optional;
-    using std::string;
     using std::vector;
+
+    /// public error report fn
+    template <typename T, typename... Args> inline
+    T unexpected(const char* fmt, Args... args)
+    {
+        throw std::format(fmt, args...);
+        return T();
+    }
 
     class Scanner
     {
@@ -51,19 +57,17 @@ namespace aec
         ~Lexer() = default;
 
     public:
-        Lexer(const string &text);
+        Lexer(string &&text);
 
     public:
-        Token peek() noexcept;
+        Token peek();
         Token next();
         bool is_eof() const noexcept;
 
-    protected:
-        // error handler
-        void unexpect(string_view &&error) const;
-
     private:
-        Token _iter_next();
+
+        /// get next token
+        optional<Token> _iter_next();
 
         // each case
         Token _eat_number();
